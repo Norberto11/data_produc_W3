@@ -1,6 +1,6 @@
 ---
 title: TRI RELEASES IN US
-author: "Norberto Ortigoza"
+author: "N. Ortigoza"
 date: "July 20, 2018"
 output: ioslides_presentation
 ---
@@ -14,49 +14,47 @@ In general chemicals covered by the TRI (Toxic Release Inventory) Program are th
 * Significant adverse environmental effects
 
 ## R Code
-
 ```{r pol, echo = TRUE,eval=FALSE}
 library(plotly)
+library(dplyr)
 # Create a dataframe
 pol<-read.csv("./pol3.csv",header=TRUE,stringsAsFactors = FALSE,sep=",")
 # Create hover text
 pol$hover <- with(pol, paste("TRI (million pounds)",'<br>',State))
-pol<-mutate(pol,round(pol$Pounds,1)
+pol<-mutate(pol,Pounds=round(pol$Pounds,1))
 # Make state borders blue
 borders <- list(color = toRGB("blue"))
 # Set up some mapping options
 map_options <- list(
-  scope = 'usa',
-  projection = list(type = 'albers usa'),
-  showlakes = TRUE,
-  lakecolor = toRGB('white')
-)
+  scope = 'usa',projection = list(type = 'albers usa'),
+  showlakes = TRUE,lakecolor = toRGB('white'))
 plot_ly(z = ~pol$Pounds, text = ~pol$hover, locations = ~pol$state, 
         type = 'choropleth', locationmode = 'USA-states', 
-        color = pol$Pounds, colors = 'Reds', marker = list(line = borders)) %>%
-      layout(title = 'TRI Releases In US', geo = map_options)
+        color = pol$Pounds, colors = 'Reds', 
+        marker = list(line = borders)) %>%
+  layout(title = 'TRI Releases In US (million pounds)',geo = map_options)
 ```
 
 ## Plot
 
 ```{r plot,echo=FALSE,message=FALSE}
 library(plotly)
+library(dplyr)
 # Create a dataframe
 pol<-read.csv("./pol3.csv",header=TRUE,stringsAsFactors = FALSE,sep=",")
 # Create hover text
 pol$hover <- with(pol, paste("TRI (million pounds)",'<br>',State))
+pol<-mutate(pol,Pounds=round(pol$Pounds,1))
 # Make state borders blue
 borders <- list(color = toRGB("blue"))
 # Set up some mapping options
 map_options <- list(
-  scope = 'usa',
-  projection = list(type = 'albers usa'),
-  showlakes = TRUE,
-  lakecolor = toRGB('white')
-)
+  scope = 'usa',projection = list(type = 'albers usa'),
+  showlakes = TRUE,lakecolor = toRGB('white'))
 plot_ly(z = ~pol$Pounds, text = ~pol$hover, locations = ~pol$state, 
         type = 'choropleth', locationmode = 'USA-states', 
-        color = pol$Pounds, colors = 'Reds', marker = list(line = borders)) %>%
-      layout(title = 'TRI Releases In US', geo = map_options)
+        color = pol$Pounds, colors = 'Reds', 
+        marker = list(line = borders)) %>%
+  layout(title = 'TRI Releases In US (million pounds)',geo = map_options)
 ```
 
