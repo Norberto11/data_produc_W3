@@ -1,0 +1,44 @@
+---
+title: <font size="5"> TRI CHEMICALS RELEASES IN US </font>
+date: "July 19, 2018"
+output: html_document
+---
+
+(Reference: scorecard.goodguide.com) 
+
+http://scorecard.goodguide.com/ranking/rank-states.tcl?type=mass&category=total_env&modifier=na&how_many=100
+
+
+*Click on each state to display the amount of reported Releases of TRI Chemicals to the Environment in* **million pounds**
+
+
+```{r polmap,echo=FALSE,message=FALSE}
+library(plotly)
+library(dplyr)
+# Create a dataframe
+pol<-read.csv("./pollution.csv",stringsAsFactors = FALSE)
+pol2<-cbind(pol,state.name,state.abb)
+pol2<-mutate(pol2,Pounds_Millions=round(Pounds/1000000,1))
+# Create hover text
+pol2$hover <- with(pol2, paste("TRI (million pounds)",'<br>',state.name))
+# Make state borders white
+borders <- list(color = toRGB("blue"))
+# Set up some mapping options
+map_options <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  showlakes = TRUE,
+  lakecolor = toRGB('white')
+)
+plot_ly(z = ~pol2$Pounds_Millions, text = ~pol2$hover, locations = ~pol2$state.abb, 
+        type = 'choropleth', locationmode = 'USA-states', 
+        color = pol2$Pounds_Millions, colors = 'Reds', marker = list(line = borders)) %>%
+  layout(title = 'TRI Releases In US', geo = map_options)
+```
+
+Note: In general chemicals covered by the TRI (Toxic Release Inventory) Program are those that cause one or more of the following:
+
+
+* Cancer or other chronic human health effects
+* Significant adverse acute human health effects
+* Significant adverse environmental effects
